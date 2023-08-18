@@ -13,16 +13,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut buffer = String::new();
     file.read_to_string(&mut buffer)?;
 
-    let mut total_score: u16 = 0;
-
     // Split the input and collect
     let rucksacks: Vec<&str> = buffer.trim().split('\n').collect();
+    let total_score = part1(&rucksacks);
+    println!("Total score: {}", total_score);
+
+    Ok(())
+}
+
+fn part1(rucksacks: &Vec<&str>) -> u16 {
+    let mut total_score: u16 = 0;
     for rucksack in rucksacks {
         let mid_index = rucksack.len() / 2;
 
         let first_half = &rucksack[..mid_index];
         let second_half = &rucksack[mid_index..];
-
 
         for character in first_half.chars() {
             let shared_char = second_half.chars().any(|c| c == character);
@@ -40,7 +45,5 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         }
     }
-    println!("Total score: {}", total_score);
-
-    Ok(())
+    total_score
 }
