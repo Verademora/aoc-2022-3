@@ -15,8 +15,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Split the input and collect
     let rucksacks: Vec<&str> = buffer.trim().split('\n').collect();
+    
+    // Do part 1
     let total_score = part1(&rucksacks);
-    println!("Total score: {}", total_score);
+    println!("Part 1 total score: {}", total_score);
+
+    // Do part 2
+    let total_score2 = part2(&rucksacks);
+    println!("Part 2 total score: {}", total_score2);
 
     Ok(())
 }
@@ -38,12 +44,35 @@ fn part1(rucksacks: &Vec<&str>) -> u16 {
                 } else {
                     ascii_value -= LOWER_OFFSET;
                 }
-                println!("Shared character: {}", &character);
-                println!("Priority score: {}", &ascii_value);
+                // println!("Shared character: {}", &character);
+                // println!("Priority score: {}", &ascii_value);
                 total_score += ascii_value as u16;
                 break;
             }
         }
     }
     total_score
+}
+
+fn part2(rucksacks: &Vec<&str>) -> u16 {
+    let mut iter = rucksacks.chunks_exact(3);
+    let mut total: u16 = 0;
+    while let Some(chunk) = iter.next() {
+        for character in chunk[0].chars() {
+            let shared_char = chunk[1].chars().any(|c| c == character);
+            let shared_char2 = chunk[2].chars().any(|c| c == character);
+            if shared_char && shared_char2 {
+                let mut ascii_value = character as u8;
+                if character.is_uppercase() {
+                    ascii_value -= CAP_OFFSET;
+                } else {
+                    ascii_value -= LOWER_OFFSET;
+                }
+                // println!("Match: {} -> {}", character, &ascii_value);
+                total += ascii_value as u16;
+                break;
+            }
+        }
+    }
+    total
 }
