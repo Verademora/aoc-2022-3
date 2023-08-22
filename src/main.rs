@@ -1,10 +1,10 @@
+use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
-use std::error::Error;
 
-pub const LOWER_START: u8 = 'a' as u8;
+pub const LOWER_START: u8 = b'a';
 pub const LOWER_OFFSET: u8 = LOWER_START - 1;
-pub const CAP_START: u8 = 'A' as u8;
+pub const CAP_START: u8 = b'A';
 pub const CAP_OFFSET: u8 = CAP_START - 27;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -15,7 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Split the input and collect
     let rucksacks: Vec<&str> = buffer.trim().split('\n').collect();
-    
+
     // Do part 1
     let total_score = part1(&rucksacks);
     println!("Part 1 total score: {}", total_score);
@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-fn part1(rucksacks: &Vec<&str>) -> u16 {
+fn part1(rucksacks: &[&str]) -> u16 {
     let mut total_score: u16 = 0;
     for rucksack in rucksacks {
         let mid_index = rucksack.len() / 2;
@@ -54,10 +54,10 @@ fn part1(rucksacks: &Vec<&str>) -> u16 {
     total_score
 }
 
-fn part2(rucksacks: &Vec<&str>) -> u16 {
-    let mut iter = rucksacks.chunks_exact(3);
+fn part2(rucksacks: &[&str]) -> u16 {
+    let iter = rucksacks.chunks_exact(3);
     let mut total: u16 = 0;
-    while let Some(chunk) = iter.next() {
+    for chunk in iter {
         for character in chunk[0].chars() {
             let shared_char = chunk[1].chars().any(|c| c == character);
             let shared_char2 = chunk[2].chars().any(|c| c == character);
